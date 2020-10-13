@@ -24,10 +24,6 @@ CREATE TABLE comments (
     created_at timestamp
 );
 
-
-
-
-
 CREATE TABLE user_language (
     username TEXT NOT NULL PRIMARY KEY REFERENCES users ON DELETE CASCADE, 
     lang_name TEXT NOT NULL REFERENCES languages ON DELETE CASCADE
