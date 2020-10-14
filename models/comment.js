@@ -3,15 +3,15 @@ const partialUpdate = require("../helpers/partialUpdate");
 
 
 class Comment {
-    static async findAll() {
+    static async findAllByLang(lang) {
         const result = await db.query(
             `SELECT *
               FROM comments
-              ORDER BY id`);
+              WHERE lang_name = $1 ORDER BY id`, [lang]);
         return result.rows;
       }
 
 
 }
 
-export default Comment;
+module.exports = Comment;

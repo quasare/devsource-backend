@@ -48,7 +48,13 @@ CREATE TABLE liked_vid (
 CREATE TABLE liked_resource (
     username TEXT PRIMARY KEY NOT NULL REFERENCES users ON DELETE CASCADE, 
     resource_id INTEGER NOT NULL  REFERENCES resources ON DELETE CASCADE, 
-    rating INTEGER NOT NULL CHECK(rating <= 1.0)
+    rating INTEGER NOT NULL CHECK(rating >= 0)
 );
 
 INSERT INTO languages (lang_name, lang_code, docs, website, logo_url) VALUES ('golang', 'go', 'docs','golang.com', 'eeeee');  
+INSERT INTO users (username, password, first_name, last_name, email, is_admin) 
+VALUES ('test1', 'testpass', 'test', 'user', 'test@test.com', FALSE);
+INSERT INTO liked_vid (username, youtube_url) VALUES ('test1', 'wewe@oyy.com') ;
+INSERT INTO liked_resource (username, resource_id, rating) VALUES ('test1', 1, 
+0);
+INSERT INTO user_language (username, lang_name) VALUES ('test1', 'golang');
