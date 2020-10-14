@@ -33,6 +33,7 @@ CREATE TABLE user_language (
 CREATE TABLE resources (
     id SERIAL PRIMARY KEY,
     lang_name TEXT NOT NULL REFERENCES languages ON DELETE CASCADE,
+    resource_name TEXT NOT NULL,
     website VARCHAR NOT NULL, 
     detail TEXT NOT NULL, 
     date_added timestamp 
@@ -49,3 +50,5 @@ CREATE TABLE liked_resource (
     resource_id INTEGER NOT NULL  REFERENCES resources ON DELETE CASCADE, 
     rating INTEGER NOT NULL CHECK(rating <= 1.0)
 );
+
+INSERT INTO languages (lang_name, lang_code, docs, website, logo_url) VALUES ('golang', 'go', 'docs','golang.com', 'eeeee');  

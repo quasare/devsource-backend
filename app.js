@@ -17,9 +17,15 @@ const usersRoutes = require("./routes/users");
 
 const authRoutes = require("./routes/auth");
 
+const langRoutes = require("./routes/languages")
 
+const resourceRoutes = require("./routes/resources")
+
+
+app.use("/lang", langRoutes)
 app.use("/users", usersRoutes);
 app.use("/", authRoutes);
+app.use('/:lang_name/resources', resourceRoutes)
 
 /** 404 handler */
 
