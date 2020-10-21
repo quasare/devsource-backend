@@ -55,7 +55,6 @@ router.post('/', async(req, res, next) => {
 
 // Delete lang if admin
 router.delete('/:lang_name', async(req, res, next) => {
-    console.log(req.params.lang_name);
     try {
         await Language.delete(req.params.lang_name)
         return res.json({message: 'Language Deleted'})

@@ -12,18 +12,18 @@ class Resource {
     }
 
     // Get one per lang
-    static async getOneByName(lang, resource_name){
+    static async getOneByName(id){
         let result = await db.query(`
             SELECT * FROM resources 
-            WHERE lang_name = $1, resource_name = $2
-        `, [lang, resource_name])
+            WHERE id = $1
+        `, [id])
 
         return result.rows[0]
     }
 // Edit resourc detail if admin
 
-    static async update(id){
-        let {query, values} = sqlForPartialUpdate('resources', data,
+    static async update(id, data){
+        let {query, values} = partialUpdate('resources', data,
          'id',id );
 
         const result = await db.query(query, values);
@@ -35,7 +35,7 @@ class Resource {
 // Create resourc if admin
     static async create(data) {
     const duplicateCheck = await db.query(`
-      SELECT resource_name FROM resources WHERE lang_name = $1, resource_name = $2
+      SELECT resource_name FROM resources WHERE lang_name = $1 and resource_name = $2
     `, [data.resource_name, data.lang_name]);
 
     if (duplicateCheck.rows[0]){
@@ -45,23 +45,24 @@ class Resource {
         throw duplicateError
     }
 
+    console.log(data);
     const result = await db.query(
       `
       INSERT INTO resources
       (lang_name, resource_name, website, detail, date_added) 
-      VALUES ($1, $2, $3, $4, $5) 
+      VALUES ($1, $2, $3, $4, current_timestamp) 
       RETURNING lang_name, resource_name, website, detail, date_added
       `, 
-      [data.lang_name, data.resource_name, data.website, data.detail, data.date_added]
+      [data.lang_name, data.resource_name, data.website, data.detail]
     )
     return result.rows[0]
   }
 // Delete resourc if admin
   static async delete(id){
     const result = await db.query(
-        `DELETE FROM languages
-        WHERE lang_name = $1`, 
-        [lang]
+        `DELETE FROM resources
+        WHERE id = $1`, 
+        [id]
       );
   }
 }
