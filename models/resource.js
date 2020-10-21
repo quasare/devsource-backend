@@ -11,7 +11,59 @@ class Resource {
         return result.rows
     }
 
+    // Get one per lang
+    static async getOneByName(lang, resource_name){
+        let result = await db.query(`
+            SELECT * FROM resources 
+            WHERE lang_name = $1, resource_name = $2
+        `, [lang, resource_name])
 
+        return result.rows[0]
+    }
+// Edit resourc detail if admin
+
+    static async update(id){
+        let {query, values} = sqlForPartialUpdate('resources', data,
+         'id',id );
+
+        const result = await db.query(query, values);
+        const resource = result.rows[0]
+
+        return resource
+    }
+
+// Create resourc if admin
+    static async create(data) {
+    const duplicateCheck = await db.query(`
+      SELECT resource_name FROM resources WHERE lang_name = $1, resource_name = $2
+    `, [data.resource_name, data.lang_name]);
+
+    if (duplicateCheck.rows[0]){
+      let duplicateError = new Error(
+        `There already exists a language with name '${data.resource_name}`);
+        duplicateError.status = 409; // 409 Conflict
+        throw duplicateError
+    }
+
+    const result = await db.query(
+      `
+      INSERT INTO resources
+      (lang_name, resource_name, website, detail, date_added) 
+      VALUES ($1, $2, $3, $4, $5) 
+      RETURNING lang_name, resource_name, website, detail, date_added
+      `, 
+      [data.lang_name, data.resource_name, data.website, data.detail, data.date_added]
+    )
+    return result.rows[0]
+  }
+// Delete resourc if admin
+  static async delete(id){
+    const result = await db.query(
+        `DELETE FROM languages
+        WHERE lang_name = $1`, 
+        [lang]
+      );
+  }
 }
 
 module.exports = Resource;
