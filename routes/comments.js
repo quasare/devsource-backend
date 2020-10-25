@@ -24,11 +24,38 @@ router.get('/', async (req, res, next) =>{
 })
 
 // Get comments for user
-// Get comments for resource
+router.get('/:username', async (req, res, next) => {
+    let user = req.params.username
+    try {
+        let comments = await Comment.getUserComment(user)
+        return res.json({comments})
+    } catch (error) {
+        return next(error)
+    }
+})
 
 // Add comment for lang need user
-// Add comment for resource need user
-// Delete comment for lang need user
-// Delete comment for resource need user
+router.post('/', async (req, res, next) => {
+    try {
+        let comment = await Comment.addComment(req.body)
+        return res.json({comment})
+    } catch (error) {
+        return next(error)
+    }
+})
 
-module.exports = router
+// Delete comment for lang need user
+router.delete('/:id', async (req, res, next) => {
+    try {
+        let comment = await Comment.delete(req.params.id)
+        return res.json('Comment Deleted')
+    } catch (error) {
+        return next(error)
+    }
+})
+
+module.exports = router;
+
+// Get comments for resource
+// Add comment for resource need user
+// Delete comment for resource need user
