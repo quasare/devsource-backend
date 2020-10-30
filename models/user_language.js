@@ -10,6 +10,14 @@ class UserLang {
         return result.rows;
     }
 
+    static async add(data){
+
+    }
+
+    static async delete(id){
+        
+    }
+
 }
 
 module.exports = UserLang;

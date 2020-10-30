@@ -5,7 +5,7 @@ const partialUpdate = require("../helpers/partialUpdate");
 class Resource {
     static async getResourcebyLang(lang){
         let result = await db.query(`
-            SELECT * FROM resources WHERE lang_name = $1
+            SELECT * FROM resources WHERE lang = $1
         `, [lang])
 
         return result.rows
@@ -35,8 +35,8 @@ class Resource {
 // Create resourc if admin
     static async create(data) {
     const duplicateCheck = await db.query(`
-      SELECT resource_name FROM resources WHERE lang_name = $1 and resource_name = $2
-    `, [data.resource_name, data.lang_name]);
+      SELECT resource_name FROM resources WHERE lang = $1 and resource_name = $2
+    `, [data.resource_name, data.lang]);
 
     if (duplicateCheck.rows[0]){
       let duplicateError = new Error(
@@ -45,15 +45,15 @@ class Resource {
         throw duplicateError
     }
 
-    console.log(data);
+
     const result = await db.query(
       `
       INSERT INTO resources
-      (lang_name, resource_name, website, detail, date_added) 
+      (lang, resource_name, website, detail, date_added) 
       VALUES ($1, $2, $3, $4, current_timestamp) 
-      RETURNING lang_name, resource_name, website, detail, date_added
+      RETURNING id, lang, resource_name, website, detail, date_added
       `, 
-      [data.lang_name, data.resource_name, data.website, data.detail]
+      [data.lang, data.resource_name, data.website, data.detail]
     )
     return result.rows[0]
   }

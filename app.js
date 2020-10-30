@@ -17,20 +17,18 @@ const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const langRoutes = require("./routes/languages")
 const resourceRoutes = require("./routes/resources")
-const langCommentRoutes = require('./routes/comments')
-const likedResourceRoutes = require('./routes/liked_resources')
-const likedVidRoutes = require('./routes/liked_vids')
+const CommentRoutes = require('./routes/comments')
+const likeRoutes = require('./routes/likes')
 const userLangRoutes = require('./routes/user_languages')
 
 
 
-app.use("/lang", langRoutes)
+app.use("/lang", langRoutes);
 app.use("/users", usersRoutes);
 app.use("/", authRoutes);
-app.use('/:lang_name/resources', resourceRoutes)
-app.use('/:lang_name/comments', langCommentRoutes)
-app.use('/:username/liked_resource', likedResourceRoutes)
-app.use('/:username/liked_vid', likedVidRoutes)
+app.use('/resources', resourceRoutes)
+app.use('/comments', CommentRoutes)
+app.use('/likes', likeRoutes)
 app.use('/:username/language', userLangRoutes)
 
 /** 404 handler */

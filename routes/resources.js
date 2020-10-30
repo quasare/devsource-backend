@@ -8,10 +8,9 @@ const { validate } = require("jsonschema");
 const { request } = require("../app");
 
 // Get all resouces for lang
-router.get('/', async (req, res, next) => {
+router.get('/:lang_name', async (req, res, next) => {
     let lang = req.params.lang_name
     try {
-        console.log('ping', lang);
         let resources = await Resource.getResourcebyLang(lang)
         return res.json({resources})
     } catch (error) {
@@ -23,7 +22,8 @@ router.get('/', async (req, res, next) => {
 
 
 // Get one per lang
-router.get('/:id', async (req, res, next) => {
+router.get('/detail/:id', async (req, res, next) => {
+    console.log(req.params.id);
     try {
         let resource = await Resource.getOneByName(req.params.id)
         return res.json({resource})
