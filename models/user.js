@@ -97,23 +97,18 @@ class User {
             WHERE username = $1`,
         [username]);
 
-    const user = userRes.rows[0];
+    // const user = userRes.rows[0];
 
-    if (!user) {
+    if (!userRes) {
       const error = new Error(`There exists no user '${username}'`);
       error.status = 404;   // 404 NOT FOUND
       throw error;
     }
 
-    const userJobsRes = await db.query(
-        `SELECT j.id, j.title, j.company_handle, a.state 
-           FROM applications AS a
-             JOIN jobs AS j ON j.id = a.job_id
-           WHERE a.username = $1`,
-        [username]);
+    // const userLanguages = await db.query();
 
-    user.jobs = userJobsRes.rows;
-    return user;
+  
+    return userRes.rows[0];
   }
 
   /** Update user data with `data`.

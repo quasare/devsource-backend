@@ -8,30 +8,60 @@ const { validate } = require("jsonschema");
 
 const {  } = require("../schemas");
 
-router.get('/', async (req, res, next) => {
-    let user = req.params.username
+router.post('/resource', async (req, res, next) => {
+    let {username, resource_id, rating} = req.body
     try {
-        let resource = await LikedResource.getAll(user)
+        let resource = await LikedResource.addLikedResource({username, resource_id, rating})
         return res.json({resource})
     } catch (error) {
         return next(error)
     }   
 })
 
-router.post('/', async (req, res, next) => {
+router.delete('/resource/:id', async (req, res, next) => {
     try {
-       let resource = await LikedResource.add(req.body) 
-       return res.json({resource})
+       let resource = await LikedResource.deleteLikedResource(req.params.id) 
+       return res.json('Like Removed')
     } catch (error) {
         return next(error)
     }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.post('/video', async (req, res, next) => {
+    let {username, youtube_url} = req.body
     try {
-        
+        let video = await LikedResource.addLikedVid({username, youtube_url})
+        return res.json({video})
     } catch (error) {
-        
+        return next(error)
+    }   
+})
+
+router.delete('/video/:id', async (req, res, next) => {
+    try {
+       let video = await LikedResource.deleteLikedVid(req.params.id) 
+       return res.json('Like Removed')
+    } catch (error) {
+        return next(error)
+    }
+})
+
+router.post('/lang', async (req, res, next) => {
+    let {username, lang_name} = req.body
+    try {
+        let lang = await LikedResource.addLikedLang({username, lang_name})
+        return res.json({lang})
+    } catch (error) {
+        return next(error)
+    }   
+})
+
+router.delete('/lang/:id', async (req, res, next) => {
+    try {
+       let lang = await LikedResource.deleteLikedVid(req.params.id) 
+       return res.json('Like Removed')
+    } catch (error) {
+        return next(error)
     }
 })
 

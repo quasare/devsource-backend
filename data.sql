@@ -35,6 +35,7 @@ CREATE TABLE comments (
 );
 
 CREATE TABLE user_language (
+    id SERIAL PRIMARY KEY,
     username TEXT NOT NULL PRIMARY KEY REFERENCES users ON DELETE CASCADE, 
     lang_name TEXT NOT NULL REFERENCES languages ON DELETE CASCADE
 );
