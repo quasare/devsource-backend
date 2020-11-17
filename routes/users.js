@@ -49,8 +49,8 @@ router.post("/register", async function(req, res, next) {
     }
 
     const newUser = await User.register(req.body);
-    const _token = createToken(newUser);
-    return res.status(201).json({ _token });
+    const token = createToken(newUser);
+    return res.status(201).json({ token });
   } catch (e) {
     return next(e);
   }
@@ -94,5 +94,37 @@ router.delete("/:username", ensureCorrectUser, async function(req, res, next) {
     return next(err);
   }
 });
+
+router.get('/:username/languages', async (req, res, next) =>{
+  try {
+      let languages = await User.getLikedLanguages(req.params.username)
+      return res.json({languages})
+  } catch (error) {
+    return next(err)
+  }
+
+})
+
+router.get('/:username/resources', async (req, res, next) =>{
+  try {
+    let resources = await User.getLikedResources(req.params.username)
+    return res.json({resources})
+  } catch (error) {
+    return next(err)
+  }
+
+})
+
+router.get('/:username/videos', async (req, res, next) =>{
+  try {
+    let videos = await User.getLikedVids(req.params.username)
+    return res.json({videos})
+  } catch (error) {
+    return next(error)
+  }
+
+})
+
+
 
 module.exports = router;

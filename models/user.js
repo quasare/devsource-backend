@@ -57,21 +57,22 @@ class User {
       err.status = 409;
       throw err;
     }
-
+    
     const hashedPassword = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
 
     const result = await db.query(
         `INSERT INTO users 
-            (username, password, first_name, last_name, email, photo_url) 
-          VALUES ($1, $2, $3, $4, $5, $6) 
-          RETURNING username, password, first_name, last_name, email, photo_url`,
+            (username, password, first_name, last_name, email, photo_url, is_admin) 
+          VALUES ($1, $2, $3, $4, $5, $6, $7) 
+          RETURNING username, password, first_name, last_name, email, photo_url, is_admin`,
         [
           data.username,
           hashedPassword,
           data.first_name,
           data.last_name,
           data.email,
-          data.photo_url
+          data.photo_url,
+          data.is_admin
         ]);
 
     return result.rows[0];
@@ -162,6 +163,32 @@ class User {
       throw notFound;
     }
   }
+
+  static async getLikedResources(username) {
+    let result = await db.query(`
+    SELECT resource_name, website FROM liked_resource  
+    JOIN resources on 
+    liked_resource.resource_id = resources.id WHERE username=$1 ORDER BY date_added DESC;
+    `, [username])
+    return result.rows
+  }
+
+  static async getLikedLanguages(username) {
+    let result = await db.query(`
+    SELECT lang_code, website FROM user_language 
+   JOIN languages ON user_language.lang_name = languages.lang_name WHERE username=$1;
+    `, [username])
+    return result.rows
+  }
+  
+  static async getLikedVids(username) {
+    let result = await db.query(`
+    SELECT youtube_url FROM liked_vid WHERE username = $1;
+    `, [username])
+    return result.rows
+  }
+  
+  
 }
 
 

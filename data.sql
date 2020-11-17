@@ -36,7 +36,7 @@ CREATE TABLE comments (
 
 CREATE TABLE user_language (
     id SERIAL PRIMARY KEY,
-    username TEXT NOT NULL PRIMARY KEY REFERENCES users ON DELETE CASCADE, 
+    username TEXT NOT NULL  REFERENCES users ON DELETE CASCADE, 
     lang_name TEXT NOT NULL REFERENCES languages ON DELETE CASCADE
 );
 
@@ -63,7 +63,10 @@ INSERT INTO languages (lang_name, lang_code, docs, website, logo_url)
     VALUES ('c++', 'cpp', 'C+= docs','cpp.com', 'eeeee');      
 
 INSERT INTO users (username, password, first_name, last_name, email, is_admin) 
-    VALUES ('test1', 'testpass', 'test', 'user', 'test@test.com', FALSE);
+    VALUES ('test1', 'password', 'test', 'user', 'test@test.com', TRUE);
+
+INSERT INTO users (username, password, first_name, last_name, email, is_admin) 
+    VALUES ('test2', 'password', 'test', 'user', 'test2@test.com', TRUE);
 
 INSERT INTO resources (lang, resource_name, website, detail, date_added) 
       VALUES ('java', 'java spring 2', 'javaspring.com 2', 'framework', current_timestamp); 

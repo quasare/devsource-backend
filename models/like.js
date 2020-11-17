@@ -30,11 +30,11 @@ class LikedResource {
         return result.rows[0]
     }
 
-    static async deleteLikedResource(id){
+    static async deleteLikedResource(data){
         const result = await db.query(`
          DELETE FROM liked_resource 
-         WHERE id = $1
-        `, [id])
+         WHERE resource_id = $1 AND username=$2
+        `, [data.id, data.username])
     }
 
     static async addLikedVid(vid){
@@ -60,17 +60,17 @@ class LikedResource {
         INSERT INTO user_language
         (username, lang_name)
          VALUES ($1, $2)
-         RETURNING username, lang_name
+         RETURNING id, username, lang_name
         `, [lang.username, lang.lang_name])
 
         return result.rows[0]
     }
 
-    static async deleteLikedLang(id){
+    static async deleteLikedLang(data){
         const result = await db.query(`
          DELETE FROM user_language
-         WHERE id = $1
-        `, [id])
+         WHERE username=$1 AND lang_name=$2
+        `, [data.username, data.lang_name])
     }
 }
 

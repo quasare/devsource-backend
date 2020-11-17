@@ -11,16 +11,16 @@ const {  } = require("../schemas");
 router.post('/resource', async (req, res, next) => {
     let {username, resource_id, rating} = req.body
     try {
-        let resource = await LikedResource.addLikedResource({username, resource_id, rating})
-        return res.json({resource})
+        let liked_resource = await LikedResource.addLikedResource({username, resource_id, rating})
+        return res.json({liked_resource})
     } catch (error) {
         return next(error)
     }   
 })
 
-router.delete('/resource/:id', async (req, res, next) => {
+router.delete('/resource', async (req, res, next) => {
     try {
-       let resource = await LikedResource.deleteLikedResource(req.params.id) 
+       let resource = await LikedResource.deleteLikedResource(req.body) 
        return res.json('Like Removed')
     } catch (error) {
         return next(error)
@@ -30,8 +30,8 @@ router.delete('/resource/:id', async (req, res, next) => {
 router.post('/video', async (req, res, next) => {
     let {username, youtube_url} = req.body
     try {
-        let video = await LikedResource.addLikedVid({username, youtube_url})
-        return res.json({video})
+        let liked_video = await LikedResource.addLikedVid({username, youtube_url})
+        return res.json({liked_video})
     } catch (error) {
         return next(error)
     }   
@@ -49,16 +49,16 @@ router.delete('/video/:id', async (req, res, next) => {
 router.post('/lang', async (req, res, next) => {
     let {username, lang_name} = req.body
     try {
-        let lang = await LikedResource.addLikedLang({username, lang_name})
-        return res.json({lang})
+        let liked_lang = await LikedResource.addLikedLang({username, lang_name})
+        return res.json({liked_lang})
     } catch (error) {
         return next(error)
     }   
 })
 
-router.delete('/lang/:id', async (req, res, next) => {
+router.delete('/lang', async (req, res, next) => {
     try {
-       let lang = await LikedResource.deleteLikedVid(req.params.id) 
+       let lang = await LikedResource.deleteLikedLang(req.body) 
        return res.json('Like Removed')
     } catch (error) {
         return next(error)

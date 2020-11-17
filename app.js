@@ -19,7 +19,6 @@ const langRoutes = require("./routes/languages")
 const resourceRoutes = require("./routes/resources")
 const CommentRoutes = require('./routes/comments')
 const likeRoutes = require('./routes/likes')
-const userLangRoutes = require('./routes/user_languages')
 const auxRoutes = require('./routes/auxillary')
 
 
@@ -29,7 +28,6 @@ app.use("/", authRoutes);
 app.use('/resources', resourceRoutes)
 app.use('/comments', CommentRoutes)
 app.use('/likes', likeRoutes)
-app.use('/:username/language', userLangRoutes)
 app.use('/aux', auxRoutes)
 
 /** 404 handler */
