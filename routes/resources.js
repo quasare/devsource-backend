@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router({mergeParams: true});
 
-const { ensureCorrectUser, authRequired } = require("../middleware/auth");
+const { authRequired, adminRequired } = require("../middleware/auth");
 
 const Resource = require("../models/resource");
 const { validate } = require("jsonschema");
-const { request } = require("../app");
+
+const { newResource, updateResource } = require("../schemas");
+
 
 // Get all resouces for lang
-router.get('/:lang_name', async (req, res, next) => {
+router.get('/:lang_name', authRequired, async (req, res, next) => {
     let lang = req.params.lang_name
     try {
         let resources = await Resource.getResourcebyLang(lang)
@@ -22,7 +24,7 @@ router.get('/:lang_name', async (req, res, next) => {
 
 
 // Get one per lang
-router.get('/detail/:id', async (req, res, next) => {
+router.get('/detail/:id',authRequired, async (req, res, next) => {
     console.log(req.params.id);
     try {
         let resource = await Resource.getOneByName(req.params.id)
@@ -33,8 +35,14 @@ router.get('/detail/:id', async (req, res, next) => {
 })
 
 // Edit resource detail if admin
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', authRequired, async (req, res, next) => {
     try {
+    const validation = validate(req.body, updateResource);
+    if (!validation.valid) {
+      return next({
+        status: 400,
+        message: validation.errors.map(e => e.stack)
+      })};
         let resource = await Resource.update(req.params.id, req.body)
         return res.json({resource})
     } catch (error) {
@@ -42,8 +50,14 @@ router.patch('/:id', async (req, res, next) => {
     }
 })
 // Create resource if admin
-router.post('/', async (req, res, next) => {
+router.post('/', adminRequired, async (req, res, next) => {
     try {
+        const validation = validate(req.body, newResource);
+    if (!validation.valid) {
+      return next({
+        status: 400,
+        message: validation.errors.map(e => e.stack)
+      })};
         let resource = await Resource.create(req.body)
         return res.json({resource})
     } catch (error) {
@@ -52,7 +66,7 @@ router.post('/', async (req, res, next) => {
 })
 
 // Delete resource if admin
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', adminRequired, async (req, res, next) => {
     try {
         await Resource.delete(req.params.id)
         return res.json({message: 'Resource Deleted'})

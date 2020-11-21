@@ -2,18 +2,18 @@
 const express = require("express");
 const router = express.Router({mergeParams: true});
 
-const { ensureCorrectUser, authRequired, adminRequired } = require("../middleware/auth");
+const { ensureCorrectUser, authRequired} = require("../middleware/auth");
 
 const Comment = require("../models/comment");
 const { validate } = require("jsonschema");
 
-const {  } = require("../schemas");
+const { commentLangauge, commentResource } = require("../schemas");
 
 
 /** Comment Routes */
 
 // Get comments for lang
-router.get('/language/:lang_name', async (req, res, next) =>{
+router.get('/language/:lang_name', authRequired ,async (req, res, next) =>{
     let lang = req.params.lang_name
     try {
         let comments = await Comment.findAllByLang(lang)
@@ -24,7 +24,7 @@ router.get('/language/:lang_name', async (req, res, next) =>{
 })
 
 // Get comments for resource
-router.get('/resource/:id', async (req, res, next) =>{
+router.get('/resource/:id', authRequired, async (req, res, next) =>{
     let resource = req.params.id
     try {
         let comments = await Comment.findAllByResource(resource)
@@ -36,7 +36,7 @@ router.get('/resource/:id', async (req, res, next) =>{
 
 
 // Get comments for user
-router.get('/user/:username', async (req, res, next) => {
+router.get('/user/:username', ensureCorrectUser, async (req, res, next) => {
     let user = req.params.username
     try {
         let comments = await Comment.getUserComment(user)
@@ -47,8 +47,14 @@ router.get('/user/:username', async (req, res, next) => {
 })
 
 // Add comment for lang need user
-router.post('/lang', async (req, res, next) => {
+router.post('/lang', authRequired, async (req, res, next) => {
     try {
+    const validation = validate(req.body, commentLangauge);
+    if (!validation.valid) {
+      return next({
+        status: 400,
+        message: validation.errors.map(e => e.stack)
+      })};
         let comment = await Comment.addCommentLang(req.body)
         return res.json({comment})
     } catch (error) {
@@ -58,8 +64,15 @@ router.post('/lang', async (req, res, next) => {
 
 
 // Add comment for resource need user
-router.post('/resource', async (req, res, next) => {
+router.post('/resource',authRequired, async (req, res, next) => {
+    
     try {
+        const validation = validate(req.body, commentResource);
+    if (!validation.valid) {
+      return next({
+        status: 400,
+        message: validation.errors.map(e => e.stack)
+      })};
         let comment = await Comment.addCommentResource(req.body)
         return res.json({comment})
     } catch (error) {
@@ -68,7 +81,7 @@ router.post('/resource', async (req, res, next) => {
 })
 
 // Delete comment for lang need user
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authRequired, async (req, res, next) => {
     try {
         let comment = await Comment.delete(req.params.id)
         return res.json('Comment Deleted')

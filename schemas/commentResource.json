@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "username": "test1",
+            "resource_id": 1,
+            "comment_text": "second comment"
+        }
+    ],
+    "required": [
+        "username",
+        "resource_id",
+        "comment_text"
+    ],
+    "properties": {
+        "username": {
+            "$id": "#/properties/username",
+            "type": "string",
+            "title": "The username schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "test1"
+            ]
+        },
+        "resource_id": {
+            "$id": "#/properties/resource_id",
+            "type": "integer",
+            "title": "The resource_id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "comment_text": {
+            "$id": "#/properties/comment_text",
+            "type": "string",
+            "title": "The comment_text schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "second comment"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

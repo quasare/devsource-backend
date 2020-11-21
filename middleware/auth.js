@@ -14,9 +14,10 @@ const {SECRET} = require("../config");
  */
 
 function authRequired(req, res, next) {
+  
   try {
-    JSON.parse(req.query._token)
-    const tokenStr = req.body._token || req.query._token;
+    const tokenStr = req.body.token || req.query.token;
+    console.log(tokenStr);
     let token = jwt.verify(tokenStr, SECRET);
     req.username = token.username;
     return next();
@@ -40,7 +41,7 @@ function authRequired(req, res, next) {
 
 function adminRequired(req, res, next) {
   try {
-    const tokenStr = req.body._token;
+    const tokenStr = req.body.token;
 
     let token = jwt.verify(tokenStr, SECRET);
     req.username = token.username;
@@ -73,11 +74,10 @@ function adminRequired(req, res, next) {
 
 function ensureCorrectUser(req, res, next) {
   try {
-    const tokenStr = req.body._token || req.query._token;
+    const tokenStr = req.body.token || req.query.token;
 
     let token = jwt.verify(tokenStr, SECRET);
     req.username = token.username;
-
     if (token.username === req.params.username) {
       return next();
     }

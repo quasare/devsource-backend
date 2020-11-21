@@ -25,7 +25,7 @@ router.get("/", authRequired, async function(req, res, next) {
 
 /** GET /[username] => {user: user} */
 
-router.get("/:username",  async function(req, res, next) {
+router.get("/:username", authRequired, async function(req, res, next) {
   try {
     const user = await User.findOne(req.params.username);
     return res.json({ user });
@@ -95,7 +95,7 @@ router.delete("/:username", ensureCorrectUser, async function(req, res, next) {
   }
 });
 
-router.get('/:username/languages', async (req, res, next) =>{
+router.get('/:username/languages', ensureCorrectUser, async (req, res, next) =>{
   try {
       let languages = await User.getLikedLanguages(req.params.username)
       return res.json({languages})
@@ -105,7 +105,7 @@ router.get('/:username/languages', async (req, res, next) =>{
 
 })
 
-router.get('/:username/resources', async (req, res, next) =>{
+router.get('/:username/resources', ensureCorrectUser, async (req, res, next) =>{
   try {
     let resources = await User.getLikedResources(req.params.username)
     return res.json({resources})
@@ -115,7 +115,7 @@ router.get('/:username/resources', async (req, res, next) =>{
 
 })
 
-router.get('/:username/videos', async (req, res, next) =>{
+router.get('/:username/videos', ensureCorrectUser, async (req, res, next) =>{
   try {
     let videos = await User.getLikedVids(req.params.username)
     return res.json({videos})

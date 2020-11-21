@@ -175,8 +175,8 @@ class User {
 
   static async getLikedLanguages(username) {
     let result = await db.query(`
-    SELECT lang_code, website FROM user_language 
-   JOIN languages ON user_language.lang_name = languages.lang_name WHERE username=$1;
+    SELECT language_name, website FROM user_language 
+   JOIN languages ON user_language.language_name = languages.lang_name WHERE username=$1;
     `, [username])
     return result.rows
   }
