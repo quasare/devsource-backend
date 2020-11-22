@@ -17,8 +17,8 @@ router.post('/resource', authRequired, async (req, res, next) => {
 })
 
 router.delete('/resource', authRequired, async (req, res, next) => {
-    let {username, resource_id} = req.params
-    console.log(req.params);
+    
+    let {username, resource_id} = req.query
     try {
        let resource = await LikedResource.deleteLikedResource({username, resource_id}) 
        return res.json('Like Removed')
@@ -38,7 +38,7 @@ router.post('/video', authRequired, async (req, res, next) => {
 })
 
 router.delete('/video/:id', authRequired, async (req, res, next) => {
-    let {username, youtube_url} = req.params
+    let {username, youtube_url} = req.query
     try {
        let video = await LikedResource.deleteLikedVid({username, youtube_url}) 
        return res.json('Like Removed')
@@ -59,7 +59,7 @@ router.post('/lang', authRequired, async (req, res, next) => {
 })
 
 router.delete('/lang', authRequired, async (req, res, next) => {
-    let {username, language_name} = req.params
+    let {username, language_name} = req.query
     try {
        let lang = await LikedResource.deleteLikedLang({username, language_name}) 
        return res.json('Like Removed')
