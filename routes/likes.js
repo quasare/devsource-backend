@@ -1,14 +1,12 @@
 const express = require("express");
 const router = express.Router({mergeParams: true});
 
-const { ensureCorrectUser} = require("../middleware/auth");
+const { ensureCorrectUser, authRequired} = require("../middleware/auth");
 
 const LikedResource = require("../models/like");
-const { validate } = require("jsonschema");
 
-const {  } = require("../schemas");
 
-router.post('/resource', ensureCorrectUser, async (req, res, next) => {
+router.post('/resource', authRequired, async (req, res, next) => {
     let {username, resource_id, rating} = req.body
     try {
         let liked_resource = await LikedResource.addLikedResource({username, resource_id, rating})
@@ -18,17 +16,18 @@ router.post('/resource', ensureCorrectUser, async (req, res, next) => {
     }   
 })
 
-router.delete('/resource', ensureCorrectUser, async (req, res, next) => {
+router.delete('/resource', authRequired, async (req, res, next) => {
+    let {username, resource_id} = req.params
     console.log(req.params);
     try {
-       let resource = await LikedResource.deleteLikedResource(req.body) 
+       let resource = await LikedResource.deleteLikedResource({username, resource_id}) 
        return res.json('Like Removed')
     } catch (error) {
         return next(error)
     }
 })
 
-router.post('/video', ensureCorrectUser, async (req, res, next) => {
+router.post('/video', authRequired, async (req, res, next) => {
     let {username, youtube_url} = req.body
     try {
         let liked_video = await LikedResource.addLikedVid({username, youtube_url})
@@ -38,17 +37,18 @@ router.post('/video', ensureCorrectUser, async (req, res, next) => {
     }   
 })
 
-router.delete('/video/:id', ensureCorrectUser, async (req, res, next) => {
+router.delete('/video/:id', authRequired, async (req, res, next) => {
+    let {username, youtube_url} = req.params
     try {
-       let video = await LikedResource.deleteLikedVid(req.params.id) 
+       let video = await LikedResource.deleteLikedVid({username, youtube_url}) 
        return res.json('Like Removed')
     } catch (error) {
         return next(error)
     }
 })
 
-router.post('/lang', ensureCorrectUser, async (req, res, next) => {
-    console.log(req.body);
+router.post('/lang', authRequired, async (req, res, next) => {
+   
     let {username, language_name} = req.body
     try {
         let liked_lang = await LikedResource.addLikedLang({username, language_name})
@@ -58,9 +58,10 @@ router.post('/lang', ensureCorrectUser, async (req, res, next) => {
     }   
 })
 
-router.delete('/lang', ensureCorrectUser, async (req, res, next) => {
+router.delete('/lang', authRequired, async (req, res, next) => {
+    let {username, language_name} = req.params
     try {
-       let lang = await LikedResource.deleteLikedLang(req.body) 
+       let lang = await LikedResource.deleteLikedLang({username, language_name}) 
        return res.json('Like Removed')
     } catch (error) {
         return next(error)

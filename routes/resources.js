@@ -25,7 +25,6 @@ router.get('/:lang_name', authRequired, async (req, res, next) => {
 
 // Get one per lang
 router.get('/detail/:id',authRequired, async (req, res, next) => {
-    console.log(req.params.id);
     try {
         let resource = await Resource.getOneByName(req.params.id)
         return res.json({resource})

@@ -26,6 +26,7 @@ router.get("/", authRequired, async function(req, res, next) {
 /** GET /[username] => {user: user} */
 
 router.get("/:username", authRequired, async function(req, res, next) {
+
   try {
     const user = await User.findOne(req.params.username);
     return res.json({ user });
