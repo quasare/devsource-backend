@@ -1,7 +1,7 @@
-const API_KEY = "AIzaSyBw_4nJ13fkX1Wk32xuq8jJgvg8M_6sUmY";
 const BASE_URL = 'https://www.googleapis.com/youtube/v3/search'
 const axios = require('axios');
 
+const API_KEY = process.env.API_KEY_LANG || "AIzaSyBw_4nJ13fkX1Wk32xuq8jJgvg8M_6sUmY";
 
 const vid = async (lang) => {
     try {

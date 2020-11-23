@@ -2,8 +2,7 @@ const axios = require('axios')
 
 const { Octokit } = require("@octokit/rest");
 
-
-const API_KEY = '8eef5bba3468782bfe28dd8424f14d55e8f1112d'
+const API_KEY = process.env.API_KEY_LANG || '8eef5bba3468782bfe28dd8424f14d55e8f1112d';
 
 const octokit = new Octokit({
     auth: API_KEY,
